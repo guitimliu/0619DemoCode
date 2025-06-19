@@ -1,0 +1,31 @@
+name: PR Test + Lint
+
+on:
+  pull_request:
+    branches:
+      - main  # PR 對 main 分支時觸發
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18  # 如果你的 Node 是 18 或其他版本，請改掉
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint . --ext .js,.ts,.vue
+
+      - name: Run Prettier check
+        run: npx prettier --check .
+
+      - name: Run Unit Tests (Jest)
+        run: npm test
